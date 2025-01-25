@@ -3,6 +3,31 @@ import gymnasium as gym
 from gymnasium.wrappers import RecordEpisodeStatistics
 from tqdm import tqdm
 import dill 
+import time
+import sys
+
+args = sys.argv
+visual = None
+sleep = 0
+if(len(args)<3):
+    print("Iniciando el juego en modo entrenamiento, no se visualizará el juego")
+    print("--------------------------------------------------------------------")
+    print("Para visualizar el juego ejecuta python main.py --train False\n")
+elif(args[1]!="--train"):
+    print("Error en los argumentos, iniciando el juego en modo entrenamiento")
+    print("--------------------------------------------------------------------")
+    print("Para visualizar el juego ejecuta python main.py --train False\n")
+else:
+    if(args[2]=="False"):
+        visual = "human"
+        sleep = 0.5
+        print("Iniciando el juego en modo visual, se entrenará lentamente")
+        print("--------------------------------------------------------------------")
+        print("Para entrenar el juego ejecuta python main.py --train True\n")
+    else:
+        print("Iniciando el juego en modo entrenamiento, no se visualizará el juego")
+        print("--------------------------------------------------------------------")
+        print("Para visualizar el juego ejecuta python main.py --train False\n")
 
 # Hiperparámetros
 learning_rate = 0.01
@@ -16,7 +41,7 @@ training_period = 250
 
 env = gym.make(
                 "Blackjack-v1",
-                #render_mode="human",           
+                render_mode=visual,           
                )
 env = RecordEpisodeStatistics(env, buffer_length=n_episodes)
 
@@ -38,6 +63,7 @@ for episode in tqdm(range(n_episodes)):
     # Juega hasta que el juego termine
     while not done:
         action = agent.get_action(obs)
+        time.sleep(sleep)
         next_obs, reward, terminated, truncated, info = env.step(action)
 
         # Actualiza el agente
