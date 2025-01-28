@@ -13,8 +13,14 @@ cd BlackJack
 pip install -r requirements.txt
 ```
 
-Para terminar, si queremos ejecutar el programa:
+Para terminar, si queremos ejecutar el programa de forma visual:
 
 ```
-python main.py
+python main.py --train False
+```
+
+Y si solo queremos entrenar el modelo:
+
+```
+python main.py --train True
 ```
